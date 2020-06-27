@@ -136,14 +136,6 @@ class MavEnv(gazebo_env.GazeboEnv):
                 data = rospy.wait_for_message'/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
             except:
                 pass
-	
-	#Pause the simulation	
-        rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            #resp_pause = pause.call()
-            self.pause()
-        except (rospy.ServiceException) as e:
-            print ("/gazebo/pause_physics service call failed")
 
         state = self.return_state(data)
 
