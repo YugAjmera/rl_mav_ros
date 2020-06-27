@@ -12,7 +12,6 @@ def publish_waypoint(x,y,z,yaw):
 	"""
 	Publish a waypoint to 
 	"""
-
 	command_publisher = rospy.Publisher('/hummingbird/command/trajectory', MultiDOFJointTrajectory, queue_size = 10)
 
 	# create trajectory msg
@@ -34,30 +33,9 @@ def publish_waypoint(x,y,z,yaw):
 
 	velocities = Twist()
 	accel = Twist()
-	point = MultiDOFJointTrajectoryPoint([transforms],[velocities],[accel], rospy.Time(1))
+	point = MultiDOFJointTrajectoryPoint([transforms],[velocities],[accel], rospy.Duration(1))
 	traj.points.append(point)
 
 	rospy.sleep(1)
 	command_publisher.publish(traj)
-
-
-if __name__ == '__main__':
-	try:
-
-		rospy.init_node("riseq_rotors_waypoint_publisher", anonymous = True)
-
-		# get command line params
-		x_des = float(sys.argv[1])
-		y_des = float(sys.argv[2])
-		z_des = float(sys.argv[3])
-		yaw_des = float(sys.argv[4])
-
-		publish_waypoint(x_des, y_des, z_des, yaw_des)
-
-		#rospy.spinOnce()
-		rospy.loginfo(" >> Published waypoint: x: {}, y: {}, z: {}, yaw: {}".format(x_des, y_des, z_des, yaw_des))
-
-
-	except rospy.ROSInterruptException:
-		print("ROS Terminated")
-		pass
+	

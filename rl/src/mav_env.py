@@ -8,12 +8,16 @@ from gym import utils, spaces
 from gym_gazebo.envs import gazebo_env
 from gym.utils import seeding
 from gym.envs.registration import register
+from std_srvs.srv import Empty
 
 from geometry_msgs.msg import PointStamped
 
+import waypub
+import time
+
 
 reg = register(
-	id='Mav-v0',
+	id='MavEnv-v0',
 	entry_point='mav_env:MavEnv',
 	max_episode_steps = 300,
 )
@@ -40,9 +44,9 @@ class MavEnv(gazebo_env.GazeboEnv):
 	
 	full_state.append(round(data.point.x))
 	full_state.append(round(data.point.y))
+	full_state.append(round(data.point.z))
 
         min_range = 5
-	min_range = min_range + 1
 
 	goal_x = 4
 	goal_y = 5
@@ -50,20 +54,19 @@ class MavEnv(gazebo_env.GazeboEnv):
         done = False
 	self.flag = False
 	
-	if(-1 < full_state[0] < min_range or -1 < full_state[1] < min_range):
+	if (full_state[0] >  min_range or full_state[0] < 0 or full_state[1] < 0 or full_state[1] > min_range):
 		done = True
+		print "Out of Limits"
 
 	if(full_state[0] == goal_x and full_state[1] == goal_y):
 		done = True
 		print "Goal Reached"
-	
-	return full_state,done
 
-    def _seed(self, seed=None):
-        self.np_random, seed = seeding.np_random(seed)
-        return [seed]
+	print(full_state)
+	return full_state, done
 
-    def step(self, action):
+
+    def stepup(self, prevstate, action):
 
         rospy.wait_for_service('/gazebo/unpause_physics')
         try:
@@ -72,28 +75,32 @@ class MavEnv(gazebo_env.GazeboEnv):
             print ("/gazebo/unpause_physics service call failed")
 
         if action == 0: #FORWARD
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.3
-            vel_cmd.angular.z = 0.0
-            self.vel_pub.publish(vel_cmd)
+            waypub.publish_waypoint(prevstate[0] + 1,prevstate[1],prevstate[2],0)
+	    print("Action: Forward")
+	    time.sleep(1)
         elif action == 1: #LEFT
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.08
-            vel_cmd.angular.z = 0.8
-            self.vel_pub.publish(vel_cmd)
+            waypub.publish_waypoint(prevstate[0],prevstate[1] +1,prevstate[2],0)
+	    print("Action: Left")
+            time.sleep(1)
         elif action == 2: #RIGHT
-            vel_cmd = Twist()
-            vel_cmd.linear.x = 0.08
-            vel_cmd.angular.z = -0.8
-            self.vel_pub.publish(vel_cmd)
+            waypub.publish_waypoint(prevstate[0],prevstate[1] - 1,prevstate[2],0)
+	    print("Action: Right")
+            time.sleep(1)
 
 	data = None
 	
         while data is None:
             try:
-                data = rospy.wait_for_message'/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
+                data = rospy.wait_for_message('/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
             except:
                 pass
+
+	rospy.wait_for_service('/gazebo/pause_physics')
+        try:
+            #resp_pause = pause.call()
+            self.pause()
+        except (rospy.ServiceException) as e:
+            print ("/gazebo/pause_physics service call failed")
 
         state,done = self.return_state(data)
 	
@@ -126,17 +133,25 @@ class MavEnv(gazebo_env.GazeboEnv):
             print ("/gazebo/unpause_physics service call failed")
 
         #Take off
-	
-
+	waypub.publish_waypoint(0,0,1,0)
+	print("Taking off")
+	time.sleep(1)
 	#read position
         data = None
 	
         while data is None:
             try:
-                data = rospy.wait_for_message'/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
+                data = rospy.wait_for_message('/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
             except:
                 pass
 
-        state = self.return_state(data)
+	rospy.wait_for_service('/gazebo/pause_physics')
+        try:
+            #resp_pause = pause.call()
+            self.pause()
+        except (rospy.ServiceException) as e:
+            print ("/gazebo/pause_physics service call failed")
 
-        return state
+        state, done = self.return_state(data)
+
+        return state, done

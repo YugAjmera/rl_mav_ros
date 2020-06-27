@@ -9,11 +9,11 @@ class QLearn:
         self.actions = actions
 
     def getQ(self, state, action):
-        return self.q.get((state, action), 0.0)
+        return self.q.get(state, action)
 
     def learnQ(self, state, action, reward, value):
         
-        oldv = self.q.get((state, action), None)
+        oldv = self.q.get(state, action)
         if oldv is None:
             self.q[(state, action)] = reward
         else:
