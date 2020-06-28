@@ -63,9 +63,9 @@ class MavEnv(gazebo_env.GazeboEnv):
 
 	if(full_state[0] == goal_x and full_state[1] == goal_y):
 		done = True
+		self.flag = True
 		print "Goal Reached"
 
-	print(full_state)
 	return full_state, done
 
 
