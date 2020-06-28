@@ -19,7 +19,6 @@ import time
 reg = register(
 	id='MavEnv-v0',
 	entry_point='mav_env:MavEnv',
-	max_episode_steps = 300,
 )
 
 class MavEnv(gazebo_env.GazeboEnv):
