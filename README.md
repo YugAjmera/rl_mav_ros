@@ -1,10 +1,8 @@
 # Autonomous Navigation of MAVs using Reinforcement Learning algorithms
 
-This repository contains the simulation source code for implementing reinforcement learning aglorithms for autonomous navigation of MAVs in indoor environments.
+This ROS Package contains the simulation source code for implementing reinforcement learning aglorithms for autonomous navigation of MAVs in indoor environments.
 
 ### Dependencies
-- ROS Melodic
-- Gazebo 9
 - Install OpenAI gym and <a href="https://github.com/erlerobot/gym-gazebo">gym_gazebo</a> package:
 ```
 sudo pip install gym
