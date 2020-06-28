@@ -137,7 +137,7 @@ class MavEnv(gazebo_env.GazeboEnv):
 	waypose = PoseStamped()
     	waypose.pose.position.x = 0.0
     	waypose.pose.position.y = 0.0
-    	waypose.pose.position.z = 1.0
+    	waypose.pose.position.z = 2.0
     	self.waypoint_pub.publish(waypose)
     	print("Reset.......")
     	time.sleep(5)
