@@ -11,8 +11,8 @@ from gym.envs.registration import register
 from std_srvs.srv import Empty
 
 from geometry_msgs.msg import PointStamped
+from geometry_msgs.msg import PoseStamped
 
-import waypub
 import time
 
 
@@ -30,6 +30,8 @@ class MavEnv(gazebo_env.GazeboEnv):
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
         self.reset_proxy = rospy.ServiceProxy('/gazebo/reset_simulation', Empty)
+
+	self.waypoint_pub = rospy.Publisher('/hummingbird/command/pose', PoseStamped, queue_size = 1)
 
 
         self.action_space = spaces.Discrete(3) #F,L,R
@@ -68,24 +70,32 @@ class MavEnv(gazebo_env.GazeboEnv):
 
     def stepup(self, prevstate, action):
 
-        rospy.wait_for_service('/gazebo/unpause_physics')
-        try:
-            self.unpause()
-        except (rospy.ServiceException) as e:
-            print ("/gazebo/unpause_physics service call failed")
-
         if action == 0: #FORWARD
-            waypub.publish_waypoint(prevstate[0] + 1,prevstate[1],prevstate[2],0)
+	    waypose = PoseStamped()
+	    waypose.pose.position.x = prevstate[0] + 1
+	    waypose.pose.position.y = prevstate[1]
+	    waypose.pose.position.z = 1.0
+	    self.waypoint_pub.publish(waypose)
 	    print("Action: Forward")
-	    time.sleep(1)
+	    time.sleep(2)
+
         elif action == 1: #LEFT
-            waypub.publish_waypoint(prevstate[0],prevstate[1] +1,prevstate[2],0)
+            waypose = PoseStamped()
+	    waypose.pose.position.x = prevstate[0]
+	    waypose.pose.position.y = prevstate[1] + 1
+	    waypose.pose.position.z = 1.0
+	    self.waypoint_pub.publish(waypose)
 	    print("Action: Left")
-            time.sleep(1)
+	    time.sleep(2)
+            
         elif action == 2: #RIGHT
-            waypub.publish_waypoint(prevstate[0],prevstate[1] - 1,prevstate[2],0)
+            waypose = PoseStamped()
+	    waypose.pose.position.x = prevstate[0]
+	    waypose.pose.position.y = prevstate[1] - 1
+	    waypose.pose.position.z = 1.0
+	    self.waypoint_pub.publish(waypose)
 	    print("Action: Right")
-            time.sleep(1)
+            time.sleep(2)
 
 	data = None
 	
@@ -95,12 +105,6 @@ class MavEnv(gazebo_env.GazeboEnv):
             except:
                 pass
 
-	rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            #resp_pause = pause.call()
-            self.pause()
-        except (rospy.ServiceException) as e:
-            print ("/gazebo/pause_physics service call failed")
 
         state,done = self.return_state(data)
 	
@@ -131,11 +135,19 @@ class MavEnv(gazebo_env.GazeboEnv):
             self.unpause()
         except (rospy.ServiceException) as e:
             print ("/gazebo/unpause_physics service call failed")
+	
+	time.sleep(3)
 
         #Take off
-	waypub.publish_waypoint(0,0,1,0)
-	print("Taking off")
-	time.sleep(1)
+	waypose = PoseStamped()
+    	waypose.pose.position.x = 0.0
+    	waypose.pose.position.y = 0.0
+    	waypose.pose.position.z = 1.0
+    	self.waypoint_pub.publish(waypose)
+    	print("TakeOff !")
+    	time.sleep(1)
+	
+
 	#read position
         data = None
 	
@@ -145,13 +157,8 @@ class MavEnv(gazebo_env.GazeboEnv):
             except:
                 pass
 
-	rospy.wait_for_service('/gazebo/pause_physics')
-        try:
-            #resp_pause = pause.call()
-            self.pause()
-        except (rospy.ServiceException) as e:
-            print ("/gazebo/pause_physics service call failed")
 
         state, done = self.return_state(data)
 
         return state, done
+
