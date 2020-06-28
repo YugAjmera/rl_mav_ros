@@ -25,13 +25,12 @@ if __name__ == '__main__':
 
     plotter = liveplot.LivePlot(outdir)
 
-
     qlearn = qlearn.QLearn(actions=range(env.action_space.n),
                     alpha=0.8, gamma=0.9, epsilon=0.1)
 	
 
     start_time = time.time()
-    total_episodes = 10
+    total_episodes = 5
  
     for x in range(total_episodes):
         done = False

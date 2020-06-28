@@ -34,7 +34,7 @@ class MavEnv(gazebo_env.GazeboEnv):
 	self.waypoint_pub = rospy.Publisher('/hummingbird/command/pose', PoseStamped, queue_size = 1)
 
 
-        self.action_space = spaces.Discrete(3) #F,L,R
+        self.action_space = spaces.Discrete(4) #F,L,R,B
         self.reward_range = (-np.inf, np.inf)
 
         self._seed()
@@ -99,6 +99,15 @@ class MavEnv(gazebo_env.GazeboEnv):
 	    self.waypoint_pub.publish(waypose)
 	    print("Action: Right")
             time.sleep(2)
+
+	elif action == 3: #Back
+            waypose = PoseStamped()
+	    waypose.pose.position.x = self.current_state[0] - 1
+	    waypose.pose.position.y = self.current_state[1]
+	    waypose.pose.position.z = self.current_state[2]
+	    self.waypoint_pub.publish(waypose)
+	    print("Action: Back")
+	    time.sleep(2)
 
 	data = None
 	

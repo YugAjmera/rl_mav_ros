@@ -22,16 +22,20 @@ class LivePlot(object):
         matplotlib.rcParams['toolbar'] = 'None'
         plt.style.use('ggplot')
         plt.xlabel("Episodes")
-        plt.ylabel(data_key)
+        
         fig = plt.gcf().canvas.set_window_title('simulation_graph')
 
     def plot(self, env):
-        if self.data_key is rewards_key:
-            data = gym.wrappers.Monitor.get_episode_rewards(env)
-        else:
-            data = gym.wrappers.Monitor.get_episode_lengths(env)
-
-        plt.plot(data, color=self.line_color)
+     
+	plot1 = plt.figure(1)
+        data = gym.wrappers.Monitor.get_episode_rewards(env)
+        plt.ylabel("Reward")
+	plt.plot(data, color=self.line_color)
+	
+	plot2 = plt.figure(2)        
+	data2 = gym.wrappers.Monitor.get_episode_lengths(env)
+	plt.ylabel("No of Step")
+	plt.plot(data2, color=self.line_color)
 
         # pause so matplotlib will display
         # may want to figure out matplotlib animation or use a different library in the future
