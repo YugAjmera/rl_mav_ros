@@ -39,6 +39,7 @@ class MavEnv(gazebo_env.GazeboEnv):
 
         self._seed()
 	self.flag = False
+	
 
     def return_state(self,data):
 	
@@ -120,32 +121,15 @@ class MavEnv(gazebo_env.GazeboEnv):
 
     def reset(self):
 
-        # Resets the state of the environment and returns an initial observation.
-        rospy.wait_for_service('/gazebo/reset_simulation')
-        try:
-            #reset_proxy.call()
-            self.reset_proxy()
-        except (rospy.ServiceException) as e:
-            print ("/gazebo/reset_simulation service call failed")
-
-        # Unpause simulation to make observation
-        rospy.wait_for_service('/gazebo/unpause_physics')
-        try:
-            #resp_pause = pause.call()
-            self.unpause()
-        except (rospy.ServiceException) as e:
-            print ("/gazebo/unpause_physics service call failed")
-	
 	time.sleep(3)
-
-        #Take off
+        #Reset
 	waypose = PoseStamped()
     	waypose.pose.position.x = 0.0
     	waypose.pose.position.y = 0.0
     	waypose.pose.position.z = 1.0
     	self.waypoint_pub.publish(waypose)
-    	print("TakeOff !")
-    	time.sleep(1)
+    	print("Reset.......")
+    	time.sleep(5)
 	
 
 	#read position
