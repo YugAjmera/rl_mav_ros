@@ -1,6 +1,6 @@
 # Autonomous Navigation of MAVs using Reinforcement Learning algorithms
 
-This repository contains the simulation source code for implementing reinforcement learning aglorithms for autonomous navigation of MAVs in indoor environments. Used RotorS, OpenAI gym and Gazebo for simulation.
+This repository contains the simulation source code for implementing reinforcement learning aglorithms for autonomous navigation of MAVs in indoor environments.
 
 ### Dependencies
 - ROS Melodic
@@ -22,7 +22,6 @@ sudo pip install -e .
 ```
 cd ~/catkin_ws/src
 git clone git@github.com:ethz-asl/rotors_simulator.git
-git clone git@github.com:ethz-asl/mav_comm.git
 ```
 
 ### Q-Learning
