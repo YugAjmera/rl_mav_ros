@@ -32,7 +32,7 @@ git clone git@github.com:ethz-asl/mav_comm.git
 
 
 ```
-roslaunch rl world.launch
-roslaunch rl start_qlearning.launch
+roslaunch rl_mav_ros world.launch
+roslaunch rl_mav_ros start_qlearning.launch
 ```
 
