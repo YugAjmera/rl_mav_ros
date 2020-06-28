@@ -69,7 +69,7 @@ class MavEnv(gazebo_env.GazeboEnv):
 	return full_state, done
 
 
-    def stepup(self, prevstate, action):
+    def step(self, prevstate, action):
 
         if action == 0: #FORWARD
 	    waypose = PoseStamped()
