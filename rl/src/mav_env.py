@@ -39,6 +39,7 @@ class MavEnv(gazebo_env.GazeboEnv):
 
         self._seed()
 	self.flag = False
+	self.current_state = []
 	
 
     def return_state(self,data):
@@ -66,34 +67,35 @@ class MavEnv(gazebo_env.GazeboEnv):
 		self.flag = True
 		print "Goal Reached"
 
+	self.current_state = full_state
 	return full_state, done
 
 
-    def step(self, prevstate, action):
+    def step(self, action):
 
         if action == 0: #FORWARD
 	    waypose = PoseStamped()
-	    waypose.pose.position.x = prevstate[0] + 1
-	    waypose.pose.position.y = prevstate[1]
-	    waypose.pose.position.z = 1.0
+	    waypose.pose.position.x = self.current_state[0] + 1
+	    waypose.pose.position.y = self.current_state[1]
+	    waypose.pose.position.z = self.current_state[2]
 	    self.waypoint_pub.publish(waypose)
 	    print("Action: Forward")
 	    time.sleep(2)
 
         elif action == 1: #LEFT
             waypose = PoseStamped()
-	    waypose.pose.position.x = prevstate[0]
-	    waypose.pose.position.y = prevstate[1] + 1
-	    waypose.pose.position.z = 1.0
+	    waypose.pose.position.x = self.current_state[0]
+	    waypose.pose.position.y = self.current_state[1] + 1
+	    waypose.pose.position.z = self.current_state[2]
 	    self.waypoint_pub.publish(waypose)
 	    print("Action: Left")
 	    time.sleep(2)
             
         elif action == 2: #RIGHT
             waypose = PoseStamped()
-	    waypose.pose.position.x = prevstate[0]
-	    waypose.pose.position.y = prevstate[1] - 1
-	    waypose.pose.position.z = 1.0
+	    waypose.pose.position.x = self.current_state[0]
+	    waypose.pose.position.y = self.current_state[1] - 1
+	    waypose.pose.position.z = self.current_state[2]
 	    self.waypoint_pub.publish(waypose)
 	    print("Action: Right")
             time.sleep(2)
@@ -121,7 +123,7 @@ class MavEnv(gazebo_env.GazeboEnv):
 
     def reset(self):
 
-	time.sleep(3)
+	time.sleep(2)
         #Reset
 	waypose = PoseStamped()
     	waypose.pose.position.x = 0.0

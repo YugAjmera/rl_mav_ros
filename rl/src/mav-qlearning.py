@@ -51,7 +51,7 @@ if __name__ == '__main__':
             action = qlearn.chooseAction(state)
             
             # Execute the action and get feedback
-            observation, reward, done, info = env.step(observation, action)
+            observation, reward, done, info = env.step(action)
             cumulated_reward += reward
 
 
