@@ -5,7 +5,7 @@ This repository contains the simulation source code for implementing reinforceme
 ### Dependencies
 - ROS Melodic
 - Gazebo 9
-- Install OpenAI gym and gym_gazebo :
+- Install OpenAI gym and <a href="https://github.com/erlerobot/gym-gazebo">gym_gazebo</a> package:
 ```
 sudo pip install gym
 sudo apt-get install python-skimage
@@ -17,6 +17,12 @@ cd ~
 git clone https://github.com/erlerobot/gym-gazebo
 cd gym-gazebo
 sudo pip install -e .
+```
+- Install <a href="https://github.com/ethz-asl/rotors_simulator">RotorS simulator</a> package:
+```
+cd ~/catkin_ws/src
+git clone git@github.com:ethz-asl/rotors_simulator.git
+git clone git@github.com:ethz-asl/mav_comm.git
 ```
 
 ### Q-Learning
