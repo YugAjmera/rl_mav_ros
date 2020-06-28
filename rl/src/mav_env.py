@@ -46,9 +46,9 @@ class MavEnv(gazebo_env.GazeboEnv):
 	
 	full_state = []
 	
-	full_state.append(round(data.point.x))
-	full_state.append(round(data.point.y))
-	full_state.append(round(data.point.z))
+	full_state.append(int(round(data.point.x)))
+	full_state.append(int(round(data.point.y)))
+	full_state.append(int(round(data.point.z)))
 
         min_range = 5
 
@@ -66,7 +66,7 @@ class MavEnv(gazebo_env.GazeboEnv):
 		done = True
 		self.flag = True
 		print "Goal Reached"
-
+	#print(full_state)
 	self.current_state = full_state
 	return full_state, done
 
