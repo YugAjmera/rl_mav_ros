@@ -39,10 +39,8 @@ roslaunch rl_mav_ros start_qlearning.launch
    * alpha = 0.8 (learning rate) 
    * gamma = 0.9 (discount factor) 
    * epsilon = 0.1 (𝜖 -greedy action selection)  <br />
-   Results after learning 100 episodes: The agent learns after about 50 episodes and then always complete the episode in 8 steps with the optimal reward of 92. <br />
+   * Results after learning 100 episodes: The agent learns after about 50 episodes and then always complete the episode in 8 steps with the optimal reward of 92. <br />
    ![](graphs.png) <br />
-   Executing the greedy policy: <br />
-   ![](policy.gif)
 
 
 ### References
