@@ -34,8 +34,10 @@ catkin_make
 roslaunch rl_mav_ros world.launch
 roslaunch rl_mav_ros start_qlearning.launch
 ```
+<p align= "center">
+<img src="greedy-policy.gif">
+</p>
 
-![](greedy-policy.gif)
 
 - Results:
    * alpha = 0.8 (learning rate) 
