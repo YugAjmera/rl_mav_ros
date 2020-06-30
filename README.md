@@ -14,7 +14,7 @@ sudo pip install keras
 - Install <a href="https://github.com/ethz-asl/rotors_simulator">RotorS simulator</a> package:
 ```
 cd ~/catkin_ws/src
-git clone git@github.com:ethz-asl/rotors_simulator.git
+git clone https://github.com/ethz-asl/rotors_simulator.git
 ```
 - Clone this package:
 ```
