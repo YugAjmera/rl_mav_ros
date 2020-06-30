@@ -30,7 +30,7 @@ if __name__ == '__main__':
 	
 
     start_time = time.time()
-    total_episodes = 5
+    total_episodes = 10
  
     for x in range(total_episodes):
         done = False
