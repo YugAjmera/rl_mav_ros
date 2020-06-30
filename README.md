@@ -35,6 +35,8 @@ roslaunch rl_mav_ros world.launch
 roslaunch rl_mav_ros start_qlearning.launch
 ```
 
+![](greedy-policy.gif)
+
 - Results:
    * alpha = 0.8 (learning rate) 
    * gamma = 0.9 (discount factor) 
