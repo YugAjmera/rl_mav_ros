@@ -12,7 +12,7 @@ pip install tensorflow-gpu (if you have a gpu if not then just pip install tenso
 sudo pip install keras
 ```
 - Install <a href="https://github.com/ethz-asl/rotors_simulator">RotorS simulator</a> package:
-* Requires Gazebo9
+   * Requires Gazebo9
 
 ```
 cd ~/catkin_ws/src
