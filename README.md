@@ -66,4 +66,5 @@ roslaunch rl_mav_ros start_expected_sarsa.launch
 ### References
 - <a href="https://github.com/erlerobot/gym-gazebo">gym_gazebo</a> package
 - <a href="http://wiki.ros.org/openai_ros">openai_ros</a> package
+- Pham, Huy X., et al. <b><a href="https://arxiv.org/abs/1801.05086">Autonomous uav navigation using reinforcement learning.</a></b> arXiv preprint arXiv:1801.05086 (2018)
 
