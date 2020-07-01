@@ -27,10 +27,9 @@ if __name__ == '__main__':
     sarsa = sarsa.Sarsa(actions=range(env.action_space.n),
                     epsilon=0.1, alpha=0.8, gamma=0.9)
 
-    
-
     start_time = time.time()
-    total_episodes = 50
+
+    total_episodes = 10
     
 
     for x in range(total_episodes):
