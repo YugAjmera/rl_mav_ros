@@ -11,8 +11,7 @@ sudo pip install h5py
 pip install tensorflow-gpu (if you have a gpu if not then just pip install tensorflow)
 sudo pip install keras
 ```
-- Install <a href="https://github.com/ethz-asl/rotors_simulator">RotorS simulator</a> package:
-   * Requires Gazebo9
+- Install <a href="https://github.com/ethz-asl/rotors_simulator">RotorS simulator</a> package: (Requires Gazebo9) <br />
 
 ```
 cd ~/catkin_ws/src
