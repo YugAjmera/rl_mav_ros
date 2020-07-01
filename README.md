@@ -12,6 +12,8 @@ pip install tensorflow-gpu (if you have a gpu if not then just pip install tenso
 sudo pip install keras
 ```
 - Install <a href="https://github.com/ethz-asl/rotors_simulator">RotorS simulator</a> package:
+* Requires Gazebo9
+
 ```
 cd ~/catkin_ws/src
 git clone https://github.com/ethz-asl/rotors_simulator.git
@@ -23,12 +25,14 @@ cd ..
 catkin_make
 ```
 
-### Q-Learning
+### Environment
 - State: Discrete(X,Y Coordinate obtained from generic odometry sensor).
 - Action: Forward, Back, Left, Right.
 - Space: 5x5 grid space.
 - Goal: [4,5]
 
+
+### Q-learning
 
 ```
 roslaunch rl_mav_ros world.launch
@@ -45,6 +49,19 @@ roslaunch rl_mav_ros start_qlearning.launch
    * epsilon = 0.1 (𝜖 -greedy action selection)  <br />
    * Results after learning 100 episodes: The agent learns after about 50 episodes and then always complete the episode in 8 steps with the optimal reward of 92. <br />
    ![](graphs.png) <br />
+
+
+### Sarsa
+```
+roslaunch rl_mav_ros world.launch
+roslaunch rl_mav_ros start_sarsa.launch
+```
+
+### Expected-Sarsa
+```
+roslaunch rl_mav_ros world.launch
+roslaunch rl_mav_ros start_expected_sarsa.launch
+```
 
 
 ### References

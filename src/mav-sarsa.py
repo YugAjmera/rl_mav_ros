@@ -8,54 +8,59 @@ import time
 import random
 import time
 import liveplot
-import qlearn
+import sarsa
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':	
 
-    rospy.init_node('qlearning', anonymous=True)
+    rospy.init_node('sarsa', anonymous=True)
     env = gym.make('MavEnv-v0')
     print "Gym Make Done"
 
-
-    outdir = '/tmp/gazebo_gym_experiments/mav'
+    outdir = '/tmp/gazebo_gym_experiments'
     env = gym.wrappers.Monitor(env, outdir, force=True)
     print "Monitor Wrapper Started"
 
     plotter = liveplot.LivePlot(outdir)
 
-    qlearn = qlearn.QLearn(actions=range(env.action_space.n),
-                    alpha=0.8, gamma=0.9, epsilon=0.1)
-	
+
+    sarsa = sarsa.Sarsa(actions=range(env.action_space.n),
+                    epsilon=0.1, alpha=0.8, gamma=0.9)
+
+    
 
     start_time = time.time()
-    total_episodes = 10
- 
+    total_episodes = 50
+    
+
     for x in range(total_episodes):
         done = False
 
         cumulated_reward = 0 
+	print("Episode = " +str(x)+ " started")
+        observation = env.reset()
 
-        print("Episode = " +str(x)+ " started")
-
-        observation, done = env.reset()
+        #render() #defined above, not env.render()
 
         state = ''.join(map(str, observation))
 
-	i = 0
+        i = 0
+        #for i in range(300):
 	while(True):
 
             # Pick an action based on the current state
-            action = qlearn.chooseAction(state)
-            
+            action = sarsa.chooseAction(state)
+
             # Execute the action and get feedback
             observation, reward, done, info = env.step(action)
             cumulated_reward += reward
 
 
             nextState = ''.join(map(str, observation))
+            nextAction = sarsa.chooseAction(nextState)
 
-            qlearn.learn(state, action, reward, nextState)
+            #sarsa.learn(state, action, reward, nextState)
+            sarsa.learn(state, action, reward, nextState, nextAction)
 
             env._flush(force=True)
 
@@ -76,10 +81,10 @@ if __name__ == '__main__':
 	
 
     #Github table content
-    print ("\n|"+str(total_episodes)+"|"+str(qlearn.alpha)+"|"+str(qlearn.gamma)+"|"+str(qlearn.epsilon)+"")
+    print ("\n|"+str(total_episodes)+"|"+str(sarsa.alpha)+"|"+str(sarsa.gamma)+"|"+str(sarsa.epsilon)+"")
 
     
     print ("Q table: ")
-    print(qlearn.q)
+    print(sarsa.q)
     env.close()
     plotter.show()

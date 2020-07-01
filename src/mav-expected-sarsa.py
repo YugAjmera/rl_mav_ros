@@ -5,49 +5,49 @@ import mav_env
 from gym import wrappers
 import gym_gazebo
 import time
+import numpy
 import random
 import time
 import liveplot
-import qlearn
+import expectedSarsa as es
 
 
 if __name__ == '__main__':
 
-    rospy.init_node('qlearning', anonymous=True)
+    rospy.init_node('expected_sarsa', anonymous=True)
     env = gym.make('MavEnv-v0')
     print "Gym Make Done"
 
 
-    outdir = '/tmp/gazebo_gym_experiments/mav'
+    outdir = '/tmp/gazebo_gym_experiments'
     env = gym.wrappers.Monitor(env, outdir, force=True)
     print "Monitor Wrapper Started"
 
     plotter = liveplot.LivePlot(outdir)
 
-    qlearn = qlearn.QLearn(actions=range(env.action_space.n),
+    es = es.ExpectedSarsa(actions=range(env.action_space.n),
                     alpha=0.8, gamma=0.9, epsilon=0.1)
 	
 
     start_time = time.time()
-    total_episodes = 10
+    total_episodes = 50
  
     for x in range(total_episodes):
         done = False
 
         cumulated_reward = 0 
-
         print("Episode = " +str(x)+ " started")
-
-        observation, done = env.reset()
+        observation = env.reset()
 
         state = ''.join(map(str, observation))
 
 	i = 0
+        #for i in range(300):
 	while(True):
 
             # Pick an action based on the current state
-            action = qlearn.chooseAction(state)
-            
+            action = es.chooseAction(state)
+
             # Execute the action and get feedback
             observation, reward, done, info = env.step(action)
             cumulated_reward += reward
@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
             nextState = ''.join(map(str, observation))
 
-            qlearn.learn(state, action, reward, nextState)
+            es.learn(state, action, reward, nextState)
 
             env._flush(force=True)
 
@@ -76,10 +76,10 @@ if __name__ == '__main__':
 	
 
     #Github table content
-    print ("\n|"+str(total_episodes)+"|"+str(qlearn.alpha)+"|"+str(qlearn.gamma)+"|"+str(qlearn.epsilon)+"")
+    print ("\n|"+str(total_episodes)+"|"+str(es.alpha)+"|"+str(es.gamma)+"|"+str(es.epsilon)+"")
 
     
     print ("Q table: ")
-    print(qlearn.q)
+    print(es.q)
     env.close()
     plotter.show()
