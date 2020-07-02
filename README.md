@@ -34,7 +34,15 @@ catkin_make
 - Action: Forward, Back, Left, Right.
 - Space: 5x5 grid space.
 - Goal: [4,5]
+- Reward: -1 at each step, -10 if the MAV goes out of limits and +100 when the MAV reaches the goal state.
+- Parameters: <br />
+   * alpha = 0.8 (learning rate) 
+   * gamma = 0.9 (discount factor) 
+   * epsilon = 0.1 (𝜖 -greedy action selection)  
 
+<p align= "center">
+<img src="greedy-policy.gif">
+</p>
 
 ### Q-learning
 
@@ -42,17 +50,6 @@ catkin_make
 roslaunch rl_mav_ros world.launch
 roslaunch rl_mav_ros start_qlearning.launch
 ```
-<p align= "center">
-<img src="greedy-policy.gif">
-</p>
-
-
-- Results:
-   * alpha = 0.8 (learning rate) 
-   * gamma = 0.9 (discount factor) 
-   * epsilon = 0.1 (𝜖 -greedy action selection)  <br />
-   * Results after learning 100 episodes: The agent learns after about 50 episodes and then completes each episode in 8 steps with the optimal reward of 92 always. <br />
-   ![](graphs.png) <br />
 
 
 ### Sarsa
@@ -60,6 +57,7 @@ roslaunch rl_mav_ros start_qlearning.launch
 roslaunch rl_mav_ros world.launch
 roslaunch rl_mav_ros start_sarsa.launch
 ```
+
 
 ### Expected-Sarsa
 ```
@@ -70,5 +68,4 @@ roslaunch rl_mav_ros start_expected_sarsa.launch
 
 ### References
 - <a href="http://wiki.ros.org/openai_ros">openai_ros</a> package
-- Pham, Huy X., et al. <b><a href="https://arxiv.org/abs/1801.05086">Autonomous uav navigation using reinforcement learning.</a></b> arXiv preprint arXiv:1801.05086 (2018)
-
+- Pham, Huy X., et al. <a href="https://arxiv.org/abs/1801.05086">Autonomous uav navigation using reinforcement learning.</a> arXiv preprint arXiv:1801.05086 (2018)

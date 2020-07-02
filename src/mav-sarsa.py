@@ -17,7 +17,7 @@ if __name__ == '__main__':
     env = gym.make('MavEnv-v0')
     print "Gym Make Done"
 
-    outdir = '/tmp/gazebo_gym_experiments'
+    outdir = '/home/yug/catkin_ws/src/rl_mav_ros/outdir/sarsa'
     env = gym.wrappers.Monitor(env, outdir, force=True)
     print "Monitor Wrapper Started"
 
@@ -25,11 +25,11 @@ if __name__ == '__main__':
 
 
     sarsa = sarsa.Sarsa(actions=range(env.action_space.n),
-                    epsilon=0.1, alpha=0.8, gamma=0.9)
+                    epsilon=0.1, alpha=0.2, gamma=0.9)
 
     start_time = time.time()
 
-    total_episodes = 10
+    total_episodes = 100
     
 
     for x in range(total_episodes):
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
-        print ("EP: "+str(x+1)+"| Reward: "+str(cumulated_reward)+" | Steps: "+str(i)+"  | Time: %d:%02d:%02d" % (h, m, s))
+        print ("EP: "+str(x+1)+"| Reward: "+str(cumulated_reward)+" | Steps: "+str(i+1)+"  | Time: %d:%02d:%02d" % (h, m, s))
 	
 
     #Github table content

@@ -22,28 +22,20 @@ class QLearn:
         else:
             self.q[(state, action)] = oldv + self.alpha * (value - oldv)
 
-    def chooseAction(self, state, return_q=False):
-        q = [self.getQ(state, a) for a in self.actions]
-        maxQ = max(q)
-
+    def chooseAction(self, state):
         if random.random() < self.epsilon:
-            minQ = min(q); mag = max(abs(minQ), abs(maxQ))
-            # add random values to all the actions, recalculate maxQ
-            q = [q[i] + random.random() * mag - .5 * mag for i in range(len(self.actions))] 
-            maxQ = max(q)
-
-        count = q.count(maxQ)
-        # In case there're several state-action max values 
-        # we select a random one among them
-        if count > 1:
-            best = [i for i in range(len(self.actions)) if q[i] == maxQ]
-            i = random.choice(best)
+            action = random.choice(self.actions)
         else:
-            i = q.index(maxQ)
+            q = [self.getQ(state, a) for a in self.actions]
+            maxQ = max(q)
+            count = q.count(maxQ)
+            if count > 1:
+                best = [i for i in range(len(self.actions)) if q[i] == maxQ]
+                i = random.choice(best)
+            else:
+                i = q.index(maxQ)
 
-        action = self.actions[i]        
-        if return_q: # if they want it, give it!
-            return action, q
+            action = self.actions[i]
         return action
 
     def learn(self, state1, action1, reward, state2):

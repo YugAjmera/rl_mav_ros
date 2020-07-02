@@ -18,7 +18,7 @@ if __name__ == '__main__':
     print "Gym Make Done"
 
 
-    outdir = '/tmp/gazebo_gym_experiments/mav'
+    outdir = '/home/yug/catkin_ws/src/rl_mav_ros/outdir/qlearning'
     env = gym.wrappers.Monitor(env, outdir, force=True)
     print "Monitor Wrapper Started"
 
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 	
 
     start_time = time.time()
-    total_episodes = 10
+    total_episodes = 100
  
     for x in range(total_episodes):
         done = False
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
         m, s = divmod(int(time.time() - start_time), 60)
         h, m = divmod(m, 60)
-        print ("EP: "+str(x+1)+"| Reward: "+str(cumulated_reward)+" | Steps: "+str(i)+"  | Time: %d:%02d:%02d" % (h, m, s))
+        print ("EP: "+str(x+1)+"| Reward: "+str(cumulated_reward)+" | Steps: "+str(i+1)+"  | Time: %d:%02d:%02d" % (h, m, s))
 	
 
     #Github table content
