@@ -4,38 +4,19 @@ import sys
 import tf
 import numpy as np
 
-from trajectory_msgs.msg import MultiDOFJointTrajectory, MultiDOFJointTrajectoryPoint
-from geometry_msgs.msg import Twist 
-from geometry_msgs.msg import Transform
+from geometry_msgs.msg import PoseStamped
 
 def publish_waypoint(x,y,z,yaw):
 	"""
 	Publish a waypoint to 
 	"""
 
-	command_publisher = rospy.Publisher('/hummingbird/command/trajectory', MultiDOFJointTrajectory, queue_size = 10)
+	command_publisher = rospy.Publisher('/hummingbird/command/pose', PoseStamped, queue_size = 1)
 
-	# create trajectory msg
-	traj = MultiDOFJointTrajectory()
-	traj.header.stamp = rospy.Time.now()
-	traj.joint_names.append('base_link')
-
-	# create end point for trajectory
-	transforms = Transform()
-	transforms.translation.x = x
-	transforms.translation.y = y
-	transforms.translation.z = z 
-
-	quat = tf.transformations.quaternion_from_euler(yaw*np.pi/180.0, 0, 0, axes = 'rzyx')
-	transforms.rotation.x = quat[0]
-	transforms.rotation.y = quat[1]
-	transforms.rotation.z = quat[2]
-	transforms.rotation.w = quat[3]
-
-	velocities = Twist()
-	accel = Twist()
-	point = MultiDOFJointTrajectoryPoint([transforms],[velocities],[accel], rospy.Time(1))
-	traj.points.append(point)
+	traj = PoseStamped()
+	traj.pose.position.x = x
+	traj.pose.position.y = y
+	traj.pose.position.z = z
 
 	rospy.sleep(1)
 	command_publisher.publish(traj)
@@ -44,7 +25,7 @@ def publish_waypoint(x,y,z,yaw):
 if __name__ == '__main__':
 	try:
 
-		rospy.init_node("riseq_rotors_waypoint_publisher", anonymous = True)
+		rospy.init_node("rotors_waypoint_publisher", anonymous = True)
 
 		# get command line params
 		x_des = float(sys.argv[1])
