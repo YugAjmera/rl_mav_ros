@@ -50,21 +50,8 @@ catkin_make
 roslaunch rl_mav_ros world.launch
 roslaunch rl_mav_ros start_qlearning.launch
 ```
-
-
-### Sarsa
-```
-roslaunch rl_mav_ros world.launch
-roslaunch rl_mav_ros start_sarsa.launch
-```
-
-
-### Expected-Sarsa
-```
-roslaunch rl_mav_ros world.launch
-roslaunch rl_mav_ros start_expected_sarsa.launch
-```
-
+- Run PID: go to src/pid folder
+- run the givewaypoint_pid.py
 
 ### References
 - <a href="http://wiki.ros.org/openai_ros">openai_ros</a> package
