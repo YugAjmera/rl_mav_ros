@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-import pid
+import PID
 import numpy as np
 import matplotlib.pyplot as plt
 import time
@@ -17,14 +17,14 @@ def publish_waypoint(x,y,z,yaw):
 
 	plotz = []
 	plot1 = []
-	velo = []
-	timer = []
+	t = []
+	
+    	start_time = time.time()
 
 	pub = rospy.Publisher('/hummingbird/command/motor_speed', Actuators, queue_size = 1)
 	acc = Actuators()
 
-	pi = pid.PIDController(1.477, 0, 0.0008679)
-	start_time = time.time()
+	pid = PID.PID(130, 0, 100)
 
 	while True:
 		#read position
@@ -32,27 +32,28 @@ def publish_waypoint(x,y,z,yaw):
 		data = rospy.wait_for_message('/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
 		    
 		plotz.append(data.point.z)
-		plot1.append(10)
+		plot1.append(z)
 		
 		plt.plot(plotz, color='blue')
 		plt.plot(plot1, color='red')
 		plt.pause(0.000001)
 
-		u_x, u_y, u_z, u_rot_z = pi.run(data.point.x, x, data.point.y, y, data.point.z, z, 0, 0)
+		error = z - data.point.z
+		throttle = pid.Update(error)
+		print(error)
+		t.append(throttle)
 
-		throttle = 457.72396556425923 + u_z
-		velo.append(throttle)
 		acc.angular_velocities = [throttle, throttle, throttle, throttle]
 		pub.publish(acc)
-	
-		#if(int(round(data.point.z)) == 30):
-			#acc.angular_velocities = [0, 0, 0, 0]
-			#pub.publish(acc)
-			#break
-		timer.append(time.time())
 
+		if(data.point.z > 20):
+			acc.angular_velocities = [0, 0, 0, 0]
+			pub.publish(acc)
+			break
+			
 
-
+		if(error * 130 > 500):
+			print("abbbbbbbbbb huaaa") 
 
 
 if __name__ == '__main__':
