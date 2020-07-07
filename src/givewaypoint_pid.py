@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import rospy
 import pid
-import sys
-import tf
 import numpy as np
-
+import matplotlib.pyplot as plt
+import time
 from geometry_msgs.msg import PointStamped
 from geometry_msgs.msg import PoseStamped
+from mav_msgs.msg import Actuators
+import time
 
 def publish_waypoint(x,y,z,yaw):
 	"""
@@ -14,29 +15,44 @@ def publish_waypoint(x,y,z,yaw):
 	"""
 	print("here")
 
-	pi = pid.PIDController(0.5, 0.00416, 0.001)
+	plotz = []
+	plot1 = []
+	velo = []
+	timer = []
 
-	#read position
-        data = None
+	pub = rospy.Publisher('/hummingbird/command/motor_speed', Actuators, queue_size = 1)
+	acc = Actuators()
+
+	pi = pid.PIDController(1.477, 0, 0.0008679)
+	start_time = time.time()
+
+	while True:
+		#read position
+		data = None
+		data = rospy.wait_for_message('/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
+		    
+		plotz.append(data.point.z)
+		plot1.append(10)
+		
+		plt.plot(plotz, color='blue')
+		plt.plot(plot1, color='red')
+		plt.pause(0.000001)
+
+		u_x, u_y, u_z, u_rot_z = pi.run(data.point.x, x, data.point.y, y, data.point.z, z, 0, 0)
+
+		throttle = 457.72396556425923 + u_z
+		velo.append(throttle)
+		acc.angular_velocities = [throttle, throttle, throttle, throttle]
+		pub.publish(acc)
 	
-        while data is None:
-            try:
-                data = rospy.wait_for_message('/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
-            except:
-		print("waiting")
-                pass
+		#if(int(round(data.point.z)) == 30):
+			#acc.angular_velocities = [0, 0, 0, 0]
+			#pub.publish(acc)
+			#break
+		timer.append(time.time())
 
-	full_state = []
-	
-	full_state.append(int(round(data.point.x)))
-	full_state.append(int(round(data.point.y)))
-	full_state.append(int(round(data.point.z)))
-	print(full_state)
 
-	u_x, u_y, u_z, u_rot_z = pi.run(full_state[0], x, full_state[1], y, full_state[2], z, 0, 0)
-	print(u_x)
 
-	
 
 
 if __name__ == '__main__':
@@ -44,13 +60,11 @@ if __name__ == '__main__':
 	rospy.init_node("rotors_waypoint_publisher", anonymous = True)
 
 	# get command line params
-	x_des = float(sys.argv[1])
-	y_des = float(sys.argv[2])
-	z_des = float(sys.argv[3])
-	yaw_des = float(sys.argv[4])
+	x_des = 0
+	y_des = 0
+	z_des = 10.0
+	yaw_des = 0
 
 	publish_waypoint(x_des, y_des, z_des, yaw_des)
 
-	#rospy.spinOnce()
-	rospy.loginfo(" >> Published waypoint: x: {}, y: {}, z: {}, yaw: {}".format(x_des, y_des, z_des, yaw_des))
-
+	
