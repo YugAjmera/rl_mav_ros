@@ -25,34 +25,16 @@ git clone https://github.com/ethz-asl/rotors_simulator.git
 - Clone this package:
 ```
 git clone https://github.com/YugAjmera/rl_mav_ros
+git checkout pid
 cd ..
 catkin_make
 ```
 
-### Environment
-- State: Discrete(X,Y Coordinate obtained from generic odometry sensor).
-- Action: Forward, Back, Left, Right.
-- Space: 5x5 grid space.
-- Goal: [4,5]
-- Reward: -1 at each step, -10 if the MAV goes out of limits and +100 when the MAV reaches the goal state.
-- Parameters: <br />
-   * alpha = 0.8 (learning rate) 
-   * gamma = 0.9 (discount factor) 
-   * epsilon = 0.1 (𝜖 -greedy action selection)  
-
-<p align= "center">
-<img src="greedy-policy.gif">
-</p>
-
-### Q-learning
+### PID
 
 ```
 roslaunch rl_mav_ros world.launch
-roslaunch rl_mav_ros start_qlearning.launch
 ```
-- Run PID: go to src/pid folder
+- go to src/pid folder
 - run the givewaypoint_pid.py
 
-### References
-- <a href="http://wiki.ros.org/openai_ros">openai_ros</a> package
-- Pham, Huy X., et al. <a href="https://arxiv.org/abs/1801.05086">Autonomous uav navigation using reinforcement learning.</a> arXiv preprint arXiv:1801.05086 (2018)
