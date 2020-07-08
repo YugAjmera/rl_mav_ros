@@ -25,12 +25,17 @@ def publish_waypoint(x,y,z,yaw):
 	pub = rospy.Publisher('/hummingbird/command/motor_speed', Actuators, queue_size = 1)
 	acc = Actuators()
 
-	pid = PID.PID(7, 0.001, 25)
+	pid = PID.PID(17, 0.01, 37)
 
 	while True:
 		#read position
 		data = None
-		data = rospy.wait_for_message('/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
+		while data is None:
+		    try:
+		        data = rospy.wait_for_message('/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
+		    except:
+		        acc.angular_velocities = [0, 0, 0, 0]
+			pub.publish(acc)
 		    
 		plotz.append(data.point.z)
 		plot1.append(z)
@@ -44,10 +49,6 @@ def publish_waypoint(x,y,z,yaw):
 	
 		tr = throttle + 457.724
 
-		if tr > 600:
-			tr = 600
-		if tr < 0:
-			tr = 0
 		print(tr)
 		acc.angular_velocities = [tr, tr, tr, tr]
 		pub.publish(acc)
