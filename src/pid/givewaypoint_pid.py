@@ -17,14 +17,14 @@ def publish_waypoint(x,y,z,yaw):
 
 	plotz = []
 	plot1 = []
-	t = []
+	
 	
     	start_time = time.time()
 
 	pub = rospy.Publisher('/hummingbird/command/motor_speed', Actuators, queue_size = 1)
 	acc = Actuators()
 
-	pid = PID.PID(130, 0, 100)
+	pid = PID.PID(7, 0.005, 30)
 
 	while True:
 		#read position
@@ -40,21 +40,22 @@ def publish_waypoint(x,y,z,yaw):
 
 		error = z - data.point.z
 		throttle = pid.Update(error)
-		print(error)
-		t.append(throttle)
+	
+		tr = throttle + 457.724
 
-		acc.angular_velocities = [throttle, throttle, throttle, throttle]
+		if tr > 600:
+			tr = 600
+		if tr < 0:
+			tr = 0
+		print(tr)
+		acc.angular_velocities = [tr, tr, tr, tr]
 		pub.publish(acc)
 
-		if(data.point.z > 20):
+		if(data.point.z > 25):
 			acc.angular_velocities = [0, 0, 0, 0]
 			pub.publish(acc)
 			break
 			
-
-		if(error * 130 > 500):
-			print("abbbbbbbbbb huaaa") 
-
 
 if __name__ == '__main__':
 	

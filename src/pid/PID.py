@@ -37,11 +37,6 @@ class PID:
         self.previous_time = current_time
         self.previous_error = error
 
-	print(self.Kp * self.Cp)
-	print(self.Ki * self.Ci)
-	print(self.Kd * self.Cd)
-	print("-------------------")
-
         return (
             (self.Kp * self.Cp)    # proportional term
             + (self.Ki * self.Ci)  # integral term
