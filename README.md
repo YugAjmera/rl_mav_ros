@@ -16,12 +16,11 @@ git clone https://github.com/erlerobot/gym-gazebo
 cd gym-gazebo
 sudo pip install -e .
 ```
-- Install <a href="https://github.com/ethz-asl/rotors_simulator">RotorS simulator</a> package: <br />
+- Ardrone simulation: 
+```
+git clone https://github.com/YugAjmera/quadrotor_ros
+```
 
-```
-cd ~/catkin_ws/src
-git clone https://github.com/ethz-asl/rotors_simulator.git
-```
 - Clone this package:
 ```
 git clone https://github.com/YugAjmera/rl_mav_ros
