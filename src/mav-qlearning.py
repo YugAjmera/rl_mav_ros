@@ -29,7 +29,7 @@ if __name__ == '__main__':
 	
 
     start_time = time.time()
-    total_episodes = 100
+    total_episodes = 5
  
     for x in range(total_episodes):
         done = False
