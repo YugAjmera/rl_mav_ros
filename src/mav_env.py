@@ -112,7 +112,7 @@ class MavEnv(gazebo_env.GazeboEnv):
 
     def reset(self):
  
-	self.waypoint.publish(0, 0, 1.0)
+	self.waypoint.publish(0, 0, 2.0)
 	#read position
         data = None
 	
