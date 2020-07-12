@@ -18,6 +18,5 @@
     		<arg name="model" value="$(find qlab_description)/urdf/quadrotor_sensors.urdf.xacro"/>
   	</include>
   </group>
-
  
 </launch>

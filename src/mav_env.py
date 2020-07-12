@@ -12,7 +12,7 @@ from std_srvs.srv import Empty
 from std_msgs.msg import Empty as EmptyTopicMsg
 from nav_msgs.msg import Odometry
 import waypoint_pub
-
+from geometry_msgs.msg import Point
 import time
 
 
@@ -75,25 +75,28 @@ class MavEnv(gazebo_env.GazeboEnv):
 
         if action == 0: #FORWARD
 	    print("forward")
-	    self.waypoint.publish(self.current_state[0] + 1, self.current_state[1], self.current_state[2])
-
+	    self.waypoint.publish(self.current_state[0] + 1, self.current_state[1], 2.0)
+	    
         elif action == 1: #LEFT
 	    print("left")
-            self.waypoint.publish(self.current_state[0], self.current_state[1] + 1, self.current_state[2])
+            self.waypoint.publish(self.current_state[0], self.current_state[1] + 1, 2.0)
+	    
             
         elif action == 2: #RIGHT
-            print("right")
-            self.waypoint.publish(self.current_state[0], self.current_state[1] - 1, self.current_state[2])
+	    print("right")
+            self.waypoint.publish(self.current_state[0], self.current_state[1] - 1, 2.0)
+	    
 
 	elif action == 3: #Back
 	    print("back")
-            self.waypoint.publish(self.current_state[0] - 1, self.current_state[1], self.current_state[2])
-
+            self.waypoint.publish(self.current_state[0] - 1, self.current_state[1], 2.0)
+	
+            
 	data = None
 	
         while data is None:
             try:
-                data = rospy.wait_for_message('/hummingbird/odometry_sensor1/position', PointStamped, timeout=1)
+                data = rospy.wait_for_message('/quadrotor/ground_truth/state', Odometry, timeout=1)
             except:
                 pass
 	
@@ -111,16 +114,17 @@ class MavEnv(gazebo_env.GazeboEnv):
         return state, reward, done, {}
 
     def reset(self):
- 
+ 	
 	self.waypoint.publish(0, 0, 2.0)
-	#read position
+	print("up")
+
         data = None
 	
         while data is None:
             try:
                 data = rospy.wait_for_message('/quadrotor/ground_truth/state', Odometry, timeout=1)
             except:
-		print("waiting")                
+		print("waiting in reset")                
 		pass
 
 
