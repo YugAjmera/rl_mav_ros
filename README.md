@@ -1,6 +1,6 @@
 # Autonomous Navigation of MAVs using Reinforcement Learning algorithms
 
-This ROS Package contains the simulation source code for implementing reinforcement learning aglorithms for autonomous navigation of MAVs in indoor environments.
+ROS Package to implement reinforcement learning aglorithms for autonomous navigation of MAVs in indoor environments. A PID algorithm is employed for position control.
 
 ### Dependencies
 - Install OpenAI gym and <a href="https://github.com/erlerobot/gym-gazebo">gym_gazebo</a> package:
