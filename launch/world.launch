@@ -18,5 +18,8 @@
     		<arg name="model" value="$(find qlab_description)/urdf/quadrotor_sensors.urdf.xacro"/>
   	</include>
   </group>
+
+  <node pkg="rl_mav_ros" type="takeoff.py" name="Takeoff" output="screen">
+  </node>
  
 </launch>
