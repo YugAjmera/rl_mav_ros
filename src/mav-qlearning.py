@@ -25,11 +25,12 @@ if __name__ == '__main__':
     plotter = liveplot.LivePlot(outdir)
 
     qlearn = qlearn.QLearn(actions=range(env.action_space.n),
-                    alpha=0.8, gamma=0.9, epsilon=0.1)
-	
+                    alpha=0.8, gamma=0.9, epsilon=0.9)
 
+    epsilon_discount = 0.9
+	
     start_time = time.time()
-    total_episodes = 5
+    total_episodes = 10
  
     for x in range(total_episodes):
         done = False
@@ -39,6 +40,9 @@ if __name__ == '__main__':
         print("Episode = " +str(x)+ " started")
 
         observation, done = env.reset()
+
+	if qlearn.epsilon > 0.01:
+            qlearn.epsilon *= epsilon_discount
 
         state = ''.join(map(str, observation))
 
